@@ -16,7 +16,8 @@ function createGalleryMarkup(images) {
 }
 listGalleryRef.insertAdjacentHTML("beforeend", galleryMarkup);
 
-let gallery = new SimpleLightbox(".gallery a");
-gallery.options.captionsData = "alt";
-//gallery.options.captionPosition = 'bottom';
-gallery.options.captionDelay = 250;
+let gallery = new SimpleLightbox(".gallery a", {
+    captionsData: "alt",
+    //captionPosition: 'bottom',
+    captionDelay: 250,
+});
