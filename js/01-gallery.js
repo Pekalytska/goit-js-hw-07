@@ -2,6 +2,7 @@ import { galleryItems } from "./gallery-items.js";
 
 const listGalleryRef = document.querySelector(".gallery");
 const galleryMarkup = createGalleryMarkup(galleryItems);
+let instance;
 
 function createGalleryMarkup(images) {
   return images
@@ -16,12 +17,10 @@ function createGalleryMarkup(images) {
     })
     .join("");
 }
-
 listGalleryRef.insertAdjacentHTML("beforeend", galleryMarkup);
 
-
 listGalleryRef.addEventListener("click", onImageClick);
-listGalleryRef.addEventListener("keydown", onModalClose)
+listGalleryRef.removeEventListener("keydown", onModalClose);
 
 function onImageClick(event) {
   event.preventDefault();
@@ -29,16 +28,18 @@ function onImageClick(event) {
   if (event.target.nodeName !== "IMG") {
     return;
   }
-    
-    const instance = basicLightbox.create(`
+
+  instance = basicLightbox.create(`
     <img src="${event.target.dataset.source}" width="800" height="600">
 `);
     instance.show();
+
+listGalleryRef.addEventListener("keydown", onModalClose);
 }
 
-//function onModalClose(e) {
-//      e.preventDefault();
-//    if (e.code === "Escape") {
-//        instance.close();
-//    }
-//}
+function onModalClose(event) {
+  event.preventDefault();
+  if (event.code === "Escape") {
+     instance.close();
+  }
+}
