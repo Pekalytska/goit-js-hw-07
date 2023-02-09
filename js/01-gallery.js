@@ -20,26 +20,29 @@ function createGalleryMarkup(images) {
 listGalleryRef.insertAdjacentHTML("beforeend", galleryMarkup);
 
 listGalleryRef.addEventListener("click", onImageClick);
-listGalleryRef.removeEventListener("keydown", onModalClose);
-
 function onImageClick(event) {
   event.preventDefault();
-
   if (event.target.nodeName !== "IMG") {
     return;
   }
 
-  instance = basicLightbox.create(`
-    <img src="${event.target.dataset.source}" width="800" height="600">
-`);
-    instance.show();
-
-listGalleryRef.addEventListener("keydown", onModalClose);
+  instance = basicLightbox.create(
+    `<img src="${event.target.dataset.source}" width="800" height="600">`,
+    {
+      onShow: (instance) => {
+        listGalleryRef.addEventListener("keydown", onModalClose);
+      },
+      onClose: (instance) => {
+        listGalleryRef.removeEventListener("keydown", onModalClose);
+      },
+    }
+  );
+  instance.show();
 }
 
 function onModalClose(event) {
   event.preventDefault();
   if (event.code === "Escape") {
-     instance.close();
+    instance.close();
   }
 }
